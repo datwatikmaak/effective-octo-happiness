@@ -1,0 +1,12 @@
+bs4
+feedparser
+Flask
+gender-guesser
+MutPy
+pandas
+pytest
+python-dateutil
+pytz
+requests
+textblob
+xlrd
