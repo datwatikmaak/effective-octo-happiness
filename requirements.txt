@@ -4,9 +4,11 @@ Flask
 gender-guesser
 MutPy
 pandas
-pytest
+pytest~=6.2.5
 python-dateutil
 pytz
 requests
 textblob
 xlrd
+
+freezegun~=1.1.0
