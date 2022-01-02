@@ -1,4 +1,4 @@
-import collections
+from collections import Counter
 from datetime import datetime
 import os
 import re
@@ -24,10 +24,10 @@ def _get_dates():
 
 def convert_to_datetime(date_str):
     """Receives a date str and convert it into a datetime object"""
-    pass
+    return datetime.strptime(date_str, '%a, %d %b %Y %H:%M:%S %z').replace(tzinfo=None)
 
 
 def get_month_most_posts(dates):
     """Receives a list of datetimes and returns the month (format YYYY-MM)
        that occurs most"""
-    pass
+    return Counter(d.strftime("%Y-%m") for d in dates).most_common(1)[0][0]
