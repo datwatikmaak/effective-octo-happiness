@@ -13,15 +13,19 @@ xmlstring = '''<?xml version="1.0" encoding="UTF-8"?>
 
 def get_tree():
     """You probably want to use ET.fromstring"""
-    pass
+    return ET.fromstring(xmlstring)
 
 
 def get_movies():
     """Call get_tree and retrieve all movie titles, return a list or generator"""
-    pass
+    return [child.attrib["title"] for child in get_tree()]
+
+
+def _get_runtime(element):
+    return int(element.attrib["runtime"].split()[0])
 
 
 def get_movie_longest_runtime():
     """Call get_tree again and return the movie title for the movie with the longest
        runtime in minutes, for latter consider adding a _get_runtime helper"""
-    pass
+    return max(list(get_tree()), key=_get_runtime).attrib["title"]
