@@ -5,6 +5,14 @@ TIMEZONES = set(pytz.all_timezones)
 
 
 def within_schedule(utc, *timezones):
-    """Receive a utc datetime and one or more timezones and check if
+    """Receive an utc datetime and one or more timezones and check if
        they are all within schedule (MEETING_HOURS)"""
-    pass
+    zones = []
+    for tz in timezones:
+        if tz not in TIMEZONES:
+            raise ValueError
+
+        if pytz.utc.localize(utc).astimezone(pytz.timezone(tz)).hour in MEETING_HOURS:
+            zones.append(True)
+
+    return len(zones) == len(timezones)
