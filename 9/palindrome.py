@@ -22,7 +22,9 @@ def is_palindrome(word):
        Case insensitive, so Madam is valid too.
        It should work for phrases too so strip all but alphanumeric chars.
        So "No 'x' in 'Nixon'" should pass (see tests for more)"""
-    pass
+    # word = word.lower().strip()
+    word = ''.join(ch for ch in word.lower().strip() if ch.isalnum())
+    return word == word[::-1]
 
 
 def get_longest_palindrome(words=None):
