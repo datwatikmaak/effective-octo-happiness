@@ -1,3 +1,4 @@
+import re
 from collections import Counter, namedtuple
 import os
 import urllib.request
@@ -36,7 +37,21 @@ def gen_files(tempfile=tempfile):
     => Here you would return 03/mridubhatnagar (lowercased!)
        followed by 03/aleksandarknezevic
     """
-    pass
+    with open(tempfile) as f:
+        data = f.read()
+        data = data.lower()
+
+    challenges = [re.split(r'[/,]+', line)
+                  for line in data.splitlines()]
+
+    filtered_filenames = [challenge
+                          for challenge in challenges
+                          if challenge[-1] != "false"]
+
+    return [
+        f"{challenge[0].strip()}/{challenge[1].strip()}"
+        for challenge in filtered_filenames
+    ]
 
 
 def diehard_pybites(files=None):
@@ -53,7 +68,20 @@ def diehard_pybites(files=None):
     if files is None:
         files = gen_files()
 
-    users = Counter()
-    popular_challenges = Counter()
+    challenges = []
+    for challenge in files:
+        challenge = re.split(r'[/]+', challenge)
+        challenges.append(challenge[0])
 
-    # your code
+    usernames = []
+    for username in files:
+        username = re.split(r'[/]+', username)
+        usernames.append(username[1])
+
+    filtered_stats = [(x, y) for x, y in zip(challenges, usernames) if y not in IGNORE]
+
+    popular_challenges = Counter(x[0] for x in filtered_stats).most_common(1)
+
+    users = Counter(x[1] for x in filtered_stats).most_common(1)
+
+    return Stats(users[0][0], popular_challenges[0])
