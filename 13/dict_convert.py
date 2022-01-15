@@ -2,7 +2,6 @@ from collections import namedtuple
 from datetime import datetime
 import json
 
-
 blog = dict(name='PyBites',
             founders=('Julian', 'Bob'),
             started=datetime(year=2016, month=12, day=19),
@@ -11,10 +10,12 @@ blog = dict(name='PyBites',
             site='https://pybit.es')
 
 # define namedtuple here
+BlogTuple = namedtuple("Blog", "name founders started tags location site")
+
 
 def dict2nt(dict_):
-    pass
+    return BlogTuple(**dict_)
 
 
 def nt2json(nt):
-    pass
+    return json.dumps(nt._asdict(), default=lambda x: x.isoformat() if isinstance(x, datetime) else None)
