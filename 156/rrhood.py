@@ -1,6 +1,8 @@
+from collections import defaultdict
+
 CHARACTERS = ['Red Riding Hood',
               # we're omitting 'mother' here for simplicity
-              # (= substring grandmother)
+              # (= substring grandmother)
               ('Grandmother', 'Grandma', 'Granny'),
               'wolf', 'woodsman']
 
@@ -47,9 +49,23 @@ Little Red Riding Hood and her Grandmother had a nice lunch and a long chat.
 def make_character_index(text=text, characters=CHARACTERS):
     """Return a dict with keys are characters (lowercased) and values
        the lines they appear in sorted order.
-       Matches should be case insensitive.
+       Matches should be case-insensitive.
        If a character has multiple synonyms
        - e.g. ('Grandmother', 'Grandma', 'Granny') -
        then return the former as key.
     """
-    pass
+    result = defaultdict(list)
+    for x, s in enumerate(text.splitlines()):
+        if s == '':
+            continue
+        for c in characters:
+            if isinstance(c, tuple):
+                flag = False
+                for p in c:
+                    if p.lower() in s.lower():
+                        flag = True
+                if flag:
+                    result[c[0].lower()].append(x)
+            elif c.lower() in s.lower():
+                result[c.lower()].append(x)
+    return result
