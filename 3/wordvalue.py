@@ -13,18 +13,26 @@ scrabble_scores = [(1, "E A O I N R T L S U"), (2, "D G"), (3, "B C M P"),
 LETTER_SCORES = {letter: score for score, letters in scrabble_scores
                  for letter in letters.split()}
 
+
 # start coding
 
 def load_words():
     """Load the words dictionary (DICTIONARY constant) into a list and return it"""
-    pass
+    with open(DICTIONARY) as f:
+        words = f.read().splitlines()
+
+    return words
 
 
 def calc_word_value(word):
     """Given a word calculate its value using the LETTER_SCORES dict"""
-    pass
+    word = list(word.upper())
+    return sum(LETTER_SCORES[char] for char in word if char in LETTER_SCORES)
 
 
 def max_word_value(words):
     """Given a list of words calculate the word with the maximum value and return it"""
-    pass
+    word_values = [calc_word_value(word) for word in words]
+    word_dict = {words[i]: word_values[i] for i in range(len(words))}
+    for k in sorted(word_dict, key=word_dict.get, reverse=True):
+        return k
