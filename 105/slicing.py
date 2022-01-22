@@ -1,6 +1,6 @@
 from string import ascii_lowercase
 
-text = """
+TEXT = """
 One really nice feature of Python is polymorphism: using the same operation
 on different types of objects.
 Let's talk about an elegant feature: slicing.
@@ -16,7 +16,7 @@ keep enjoying our bites!
 """
 
 
-def slice_and_dice(text: str = text) -> list:
+def slice_and_dice(text: str = TEXT) -> list:
     """Get a list of words from the passed in text.
        See the Bite description for step by step instructions"""
     new_text = text.strip().split("\n")
