@@ -19,4 +19,9 @@ keep enjoying our bites!
 def slice_and_dice(text: str = text) -> list:
     """Get a list of words from the passed in text.
        See the Bite description for step by step instructions"""
-    results = []
+    new_text = text.strip().split("\n")
+    lines = [line.lstrip() for line in new_text]
+    first_word = [word for word in lines if word[0] in ascii_lowercase]
+    stripped_word = [word.strip(".").strip("!").split() for word in first_word]
+
+    return [word[-1] for word in stripped_word]
