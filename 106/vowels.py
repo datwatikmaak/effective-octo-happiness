@@ -1,7 +1,7 @@
 import re
 from typing import Tuple
 
-text = """
+TEXT = """
 The Zen of Python, by Tim Peters
 
 Beautiful is better than ugly.
@@ -27,7 +27,7 @@ Namespaces are one honking great idea -- let's do more of those!
 vowels = 'aeiou'
 
 
-def strip_vowels(text: str) -> Tuple[str, int]:
+def strip_vowels(TEXT: str) -> Tuple[str, int]:
     """Replace all vowels in the input text string by a star
        character (*).
        Return a tuple of (replaced_text, number_of_vowels_found)
@@ -44,7 +44,7 @@ def strip_vowels(text: str) -> Tuple[str, int]:
 
     number_of_vowels_found = 0
     replaced_text = ""
-    for c in text:
+    for c in TEXT:
         if c.lower() in vowels:
             replaced_text += "*"
             number_of_vowels_found += 1

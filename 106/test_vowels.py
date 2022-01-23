@@ -1,4 +1,4 @@
-from vowels import strip_vowels, text
+from vowels import strip_vowels, TEXT
 
 
 def test_strip_vowels_on_zen():
