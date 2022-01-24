@@ -40,4 +40,7 @@ def get_users_for_shell(passwd_output: str = PASSWD_OUTPUT,
     """Match the passwd_output string for users with grep_shell.
        Return a list of users.
     """
-    pass
+    output = passwd_output.split("\n")
+    type_of_shell = f"bin/{grep_shell}"
+    shell = [line.split(":") for line in output if line.endswith(type_of_shell)]
+    return [user[0] for user in shell]
