@@ -1,4 +1,6 @@
 import json
+import re
+from pprint import pprint
 
 members = """
 id,first_name,last_name,email
@@ -16,4 +18,12 @@ id,first_name,last_name,email
 
 
 def convert_to_json(members=members):
-    pass
+    text = members.strip().splitlines()
+    first_line = text[0].split(",")
+
+    result = []
+    for i in text[1:]:
+        line = re.split(r'[,;|]', i)
+        result.append(dict(zip(first_line, line)))
+
+    return json.dumps(result)
