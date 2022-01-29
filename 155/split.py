@@ -1,3 +1,6 @@
+import shlex
+
+
 def split_words_and_quoted_text(text):
     """Split string text by space unless it is
        wrapped inside double quotes, returning a list
@@ -10,4 +13,4 @@ def split_words_and_quoted_text(text):
        the resulting list would be:
        ['Should', 'give', '3 elements only']
     """
-    pass
+    return shlex.split(text)
