@@ -1,6 +1,5 @@
 # source: https://www.virgin.com/richard-branson/my-top-10-quotes-living-life-better
 import re
-from collections import defaultdict
 
 HTML = """<!DOCTYPE html>
 <head>
