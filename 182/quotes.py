@@ -1,4 +1,7 @@
 # source: https://www.virgin.com/richard-branson/my-top-10-quotes-living-life-better
+import re
+from collections import defaultdict
+
 HTML = """<!DOCTYPE html>
 <head>
   <meta charset="utf-8" />
@@ -26,4 +29,13 @@ HTML = """<!DOCTYPE html>
 
 def extract_quotes(html: str = HTML) -> dict:
     """See instructions in the Bite description"""
-    pass
+    regex = re.compile(r"<p>\d+\S(.*)</p>")
+    paragraph = regex.findall(html)
+
+    return {
+        i.split('-')[1].strip(): i.split('-')[0].strip().strip('"')
+        for i in paragraph
+    }
+
+
+extract_quotes(HTML)
