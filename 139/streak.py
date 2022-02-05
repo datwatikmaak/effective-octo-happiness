@@ -1,3 +1,4 @@
+import re
 from datetime import datetime, timedelta, date
 
 TODAY = date(2018, 11, 12)
@@ -5,7 +6,8 @@ TODAY = date(2018, 11, 12)
 
 def extract_dates(data):
     """Extract unique dates from DB table representation as shown in Bite"""
-    pass
+    dates = re.findall(r" (\d{4}-\d\d-\d\d) ", data)
+    return {datetime.strptime(d, "%Y-%m-%d").date() for d in dates}
 
 
 def calculate_streak(dates):
@@ -21,4 +23,10 @@ def calculate_streak(dates):
 
        See the tests for more examples that will be used to pass your code.
     """
-    pass
+    yesterday = TODAY - timedelta(days=1)
+    count = 0
+    while yesterday in dates:
+        yesterday -= timedelta(days=1)
+        count += 1
+
+    return count + (1 if TODAY in dates else 0)
