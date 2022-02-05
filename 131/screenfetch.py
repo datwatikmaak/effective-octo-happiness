@@ -1,3 +1,5 @@
+import re
+
 output = """
                                        mohh@SERENiTY
  MMMMMMMMMMMMMMMMMMMMMMMMMmds+.        OS: Mint 19 tara
@@ -21,4 +23,20 @@ output = """
 
 def sysinfo_scrape(output):
     """Scrapes the output from screenfetch and returns a dictionary"""
-    pass
+    lines = output.splitlines()
+    if lines[0] == "":
+        lines.pop(0)
+    line = lines[0][::-1]
+    info = len(line) - re.search(r" ", line).start()
+    result = {"Name": lines[0][info:]}
+    for line in lines[1:]:
+        if search := re.search(
+                r"(?P<key>[\w ]+): (?P<value>.*)$", line[info:]
+        ):
+            group = search.groupdict()
+            result[group["key"]] = group["value"]
+
+    return result
+
+
+sysinfo_scrape(output)
