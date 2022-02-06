@@ -1,6 +1,7 @@
+from collections import Counter
 from dataclasses import dataclass, field
+from string import punctuation
 from typing import List, Set, Tuple
-
 
 STOPWORDS: set = {
     "she's", "wasn", "through", "won", "that'll", "his", "once", "this",
@@ -36,13 +37,13 @@ But, in a larger sense, we cannot dedicate—we cannot consecrate—we cannot ha
 class Corpora:
     """Add the initial variables along with creating any methods that
     will get this working as described in the bite's description.
-
-    * txt
-    * count
-    * tag
-    * extra
-    * stopwords
     """
+
+    txt: str
+    count: int = 5
+    tag: str = "#"
+    extra = []
+    stopwords = STOPWORDS
 
     @property
     def cleaned(self) -> str:
@@ -55,7 +56,14 @@ class Corpora:
         :param txt: Corpus of text
         :return: cleaned up corpus
         """
-        pass
+        txt = ''.join([char for char in self.txt.lower() if char not in punctuation])
+        for char in self.extra:
+            txt = txt.replace(char, " ")
+        for char in txt:
+            if char == "—":
+                txt = txt.replace("—", " ")
+
+        return txt
 
     @property
     def metrics(self) -> List[Tuple[str, int]]:
@@ -67,7 +75,9 @@ class Corpora:
 
         :return: List of tuples, i.e. ("word", count)
         """
-        pass
+        words = [word for word in self.cleaned.split() if word not in self.stopwords]
+        word_counter = Counter(words)
+        return word_counter.most_common(self.count)
 
     @property
     def graph(self) -> None:
@@ -95,4 +105,12 @@ class Corpora:
         :param metrics: List of tuples with word counts
         :return: None
         """
-        pass
+        for word, count in self.metrics:
+            print(f'{word: >10} {self.tag * count}')
+
+        return None
+
+
+corp = Corpora(GETTYSBURG)
+print(corp.cleaned)
+print(len(corp.cleaned))
