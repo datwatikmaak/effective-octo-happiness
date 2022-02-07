@@ -1,6 +1,6 @@
+import string
 from collections import Counter
 from dataclasses import dataclass, field
-from string import punctuation
 from typing import List, Set, Tuple
 
 STOPWORDS: set = {
@@ -30,40 +30,51 @@ GETTYSBURG: str = """Four score and seven years ago our fathers brought forth on
 
 Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battlefield of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we should do this.
 
-But, in a larger sense, we cannot dedicate—we cannot consecrate—we cannot hallow—this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us—that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion—that we here highly resolve that these dead shall not have died in vain—that this nation, under God, shall have a new birth of freedom— and that government of the people, by the people, for the people, shall not perish from the earth."""  # noqa E501
+But, in a larger sense, we cannot dedicate—we cannot consecrate—we cannot hallow—this ground. The brave men, living and dead, who struggled here, have consecrated it, far above our poor power to add or detract. The world will little note, nor long remember what we say here, but it can never forget what they did here. It is for us the living, rather, to be dedicated here to the unfinished work which they who fought here have thus far so nobly advanced. It is rather for us to be here dedicated to the great task remaining before us—that from these honored dead we take increased devotion to that cause for which they gave the last full measure of devotion—that we here highly resolve that these dead shall not have died in vain—that this nation, under God, shall have a new birth of freedom— and that government of the people, by the people, for the people, shall not perish from the earth."""
 
 
 @dataclass
 class Corpora:
-    """Add the initial variables along with creating any methods that
+    """Add the inital variables along with creating any methods that
     will get this working as described in the bite's description.
-    """
 
+    * txt
+    * count
+    * tag
+    * extra
+    * stopwords
+    """
     txt: str
     count: int = 5
     tag: str = "#"
-    extra = []
-    stopwords = STOPWORDS
+    extra: List[str] = field(default_factory=list)
+    stopwords: Set[str] = field(default_factory=set)
+
+    def __post_init__(self):
+        self.extra = self.extra or []
+        self.stopwords = STOPWORDS
 
     @property
     def cleaned(self) -> str:
         """Takes a corpus and cleans it up.
 
         * All text is made lowercase
-        * All punctuation is removed
-        * If a list of extra characters were given, remove those too
+        * All punctuations are removed
+        * If a list of extract objects were given, remove those too
 
         :param txt: Corpus of text
         :return: cleaned up corpus
         """
-        txt = ''.join([char for char in self.txt.lower() if char not in punctuation])
-        for char in self.extra:
-            txt = txt.replace(char, " ")
-        for char in txt:
-            if char == "—":
-                txt = txt.replace("—", " ")
+        trans = str.maketrans("", "", string.punctuation)
+        c_txt = "".join(
+            line.translate(trans) + " " for line in self.txt.lower().splitlines()
+        )
 
-        return txt
+        if self.extra:
+            for char in self.extra:
+                c_txt = c_txt.replace(char, " ")
+
+        return c_txt
 
     @property
     def metrics(self) -> List[Tuple[str, int]]:
@@ -75,9 +86,8 @@ class Corpora:
 
         :return: List of tuples, i.e. ("word", count)
         """
-        words = [word for word in self.cleaned.split() if word not in self.stopwords]
-        word_counter = Counter(words)
-        return word_counter.most_common(self.count)
+        txt_lst = [w for w in self.cleaned.strip().split() if w not in self.stopwords]
+        return Counter(txt_lst).most_common(self.count)
 
     @property
     def graph(self) -> None:
@@ -88,7 +98,7 @@ class Corpora:
         * The word is right-aligned and takes up 10 character spaces
         * The tag is repeated the number of counts of the word
 
-        For example, the top 10 words in the Gettysburg address would be
+        For example, the top 10 words in the Gettysburgh address would be
         displayed in this manner:
 
             nation #####
@@ -105,12 +115,6 @@ class Corpora:
         :param metrics: List of tuples with word counts
         :return: None
         """
-        for word, count in self.metrics:
-            print(f'{word: >10} {self.tag * count}')
-
-        return None
-
-
-corp = Corpora(GETTYSBURG)
-print(corp.cleaned)
-print(len(corp.cleaned))
+        for metric in self.metrics:
+            word, value = metric
+            print(f"{word:>10} {self.tag * value}")
