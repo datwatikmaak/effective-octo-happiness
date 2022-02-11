@@ -6,8 +6,16 @@ group3 = {'brenda': 17, 'otto': 44, 'thomas': 46}
 
 
 def get_person_age(name):
-    """Look up name (case insensitive search) and return age.
+    """Look up name (case-insensitive search) and return age.
        If name in > 1 dict, return the match of the group with
        greatest N (so group3 > group2 > group1)
     """
-    pass
+    groups = {**group1, **group2, **group3}
+    try:
+        return groups[name.lower()]
+    except:
+        return NOT_FOUND
+
+
+print(get_person_age("helen"))
+# {'tim': 30, 'bob': 17, 'ana': 26, 'thomas': 46, 'helen': 26, 'brenda': 17, 'otto': 44}
