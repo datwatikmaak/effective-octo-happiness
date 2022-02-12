@@ -3,4 +3,4 @@ def sort_words_case_insensitively(words):
        (1995, 19ab = numbers / Happy, happy4you = strings, hence for
         numbers you only need to check the first char of the word)
     """
-    pass
+    return sorted(words, key=lambda x: (str(x)[0].isdigit(), str(x.casefold())))
