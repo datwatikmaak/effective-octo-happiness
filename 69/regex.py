@@ -1,5 +1,4 @@
 import re
-from string import punctuation
 
 
 def has_timestamp(text):
@@ -54,6 +53,3 @@ def convert_emea_date_to_amer_date(date):
        (AMER date format)"""
     regex = re.compile(r"(\d+/)(\d+/)(\d+)")
     return regex.sub(r"\2\1\3", date)
-
-
-print(convert_emea_date_to_amer_date("31/03/2018"))
