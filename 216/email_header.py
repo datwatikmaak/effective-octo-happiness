@@ -20,9 +20,15 @@ X-SendGrid-Contentd-ID: {"test_id":"1371661776"}"""  # noqa E501
 
 
 def get_email_details(header: str) -> dict:
-    """User re.search or re.match to capture the from, to, subject
+    """Use re.search or re.match to capture the from, to, subject
        and date fields. Return the groupdict() of matching object, see:
        https://docs.python.org/3.7/library/re.html#re.Match.groupdict
        If not match, return None
     """
-    pass
+    match = re.search(
+        r"(From:\s(?P<from>.*)\n.*To:\s(?P<to>.*)\n.*Subject:\s(?P<subject>.+?)\n.*Date:\s(?P<date>.*)\s[+-])", header,
+        re.MULTILINE | re.DOTALL)
+    return match.groupdict() if match else None
+
+
+print(get_email_details(EMAIL_HEADER))
