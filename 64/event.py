@@ -1,4 +1,4 @@
-import itertools
+from itertools import zip_longest
 
 names = 'Tim Bob Julian Carmen Sofia Mike Kim Andre'.split()
 locations = 'DE ES AUS NL BR US'.split()
@@ -6,7 +6,7 @@ confirmed = [False, True, True, False, True]
 
 
 def get_attendees():
-    for participant in zip(names, locations, confirmed):
+    for participant in zip_longest(names, locations, confirmed, fillvalue="-"):
         print(participant)
 
 
